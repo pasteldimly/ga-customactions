@@ -10,9 +10,14 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: download and cached depen.
+        id: id2
         uses: ./.github/actions/action1/
+        # use input of ca in wf
         with:
           input1: "false"
+        # use jo of ca in wf
+      - name: jo1
+        run: echo "${{ steps.id2.outputs.output1 }}"
       - name: Lint code
         run: npm run lint
   test:

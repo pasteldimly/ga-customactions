@@ -8,6 +8,11 @@ inputs:
     description: "whether to cache depen. or not"
     required: false
     default: "true"
+# use outputs
+outputs:
+  output1:
+    description: desc1
+    value: ${{ steps.id1.outputs.city }}
 runs:
   using: "composite"
   steps:
@@ -19,7 +24,10 @@ runs:
         path: node_modules
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Install dependencies
+      id: id1
       if: steps.cache.outputs.cache-hit != 'true' && inputs.input1 != 'true'
       # when we use custom action for run cmd we must give shell key also
-      run: npm ci
+      run: |
+        npm ci
+        echo "city=delhi" >> $GITHUB_OUTPUT
       shell: bash
