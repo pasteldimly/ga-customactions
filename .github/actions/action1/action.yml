@@ -1,0 +1,18 @@
+# create composite action
+
+name: download and cached depen.
+description: get the depen. via npm and cached it
+runs:
+  using: "composite"
+  steps:
+    - name: Cache dependencies
+      id: cache
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+    - name: Install dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      # when we use custom action for run cmd we must give shell key also
+      run: npm ci
+      shell: bash
